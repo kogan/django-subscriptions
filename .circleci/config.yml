@@ -48,55 +48,6 @@ workflows:
               branches:
                 ignore: /.*/
 
-workflows:
-  version: 2
-
-  tests-workflow:
-    jobs:
-      - build
-      - test-version:
-          version: "3.6"
-          requires:
-            - build
-      - test-version:
-          version: "3.7"
-          requires:
-            - build
-      - test-version:
-          version: "2.7"
-          requires:
-            - build
-
-  deployment-workflow:
-    jobs:
-      # Runs build and test, but now just on Git tags (created from a GitHub release)
-      - build:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-
-      - test-version:
-          version: "3.6"
-          requires:
-            - build
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-
-      # Runs the deployment job, just with the tags as well
-      - deployment:
-          requires:
-            - test-version
-          filters:
-              tags:
-                only: /v[0-9]+(\.[0-9]+)*/
-              branches:
-                ignore: /.*/
-
 jobs:
   build:
     docker:
