@@ -7,13 +7,16 @@ workflows:
       - build
       - test-version:
           version: "3.6"
+          name: "Python 3.6"
           requires:
             - build
       - test-version:
           version: "3.7"
+          name: "Python 3.7"
           requires:
             - build
       - test-py2:
+          name: "Python 2.7"
           requires:
             - build
 
@@ -28,6 +31,7 @@ workflows:
 
       - test-version:
           version: "3.6"
+          name: "Python 3.6"
           requires:
             - build
           filters:
