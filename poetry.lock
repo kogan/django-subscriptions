@@ -577,7 +577,7 @@ python-versions = ">=2.7"
 version = "0.3.3"
 
 [metadata]
-content-hash = "020b4827e2e29db83e4efc18bb7e513c39a9cc055d6cfed35f1a452ca761bc7a"
+content-hash = "107ffd97459aba7abccb773afec21f7efee3208912bdaecaef639f4e9d485df3"
 python-versions = ">=3.6"
 
 [metadata.hashes]
