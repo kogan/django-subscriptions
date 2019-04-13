@@ -13,7 +13,7 @@ workflows:
           version: "3.7"
           requires:
             - build
-      - test-p2:
+      - test-py2:
           requires:
             - build
 
