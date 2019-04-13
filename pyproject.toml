@@ -56,7 +56,7 @@ django = ">=2.2"
 flake8 = "^3.7"
 flake8-isort = "^2.7"
 flake8-builtins = "^1.4"
-flake8-comprehensions = "^1.4"
+flake8-comprehensions = "^2.1"
 flake8-pep3101 = "^1.2"
 isort = "^4.3"
 black = {version = "^18.3-alpha.0",allows-prereleases = true}
