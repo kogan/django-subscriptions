@@ -1,0 +1,69 @@
+[tool.isort]
+combine_as_imports = true
+default_section = "FIRSTPARTY"
+line_length = 100
+multi_line_output = 3
+force_grid_wrap = 0
+include_trailing_comma = true
+not_skip = "__init__.py"
+skip = "migrations"
+known_third_party = ["django", "django_fsm"]
+known_first_party = [
+    "subscriptions",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.poetry]
+name = "django-subscriptions"
+readme = "README.md"
+homepage = "http://github.com/kogan/"
+repository = "http://github.com/kogan/django-subscriptions/"
+documentation = "http://github.com/kogan/django-subscriptions/"
+version = "0.1.0"
+description = "A django package for managing subscription states"
+license = "BSD-3-Clause"
+authors = ["Josh Smeaton <josh.smeaton@gmail.com>"]
+packages = [
+    { include = "subscriptions", from = "src" },
+]
+keywords = ["subscriptions", "django"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Framework :: Django",
+    "Framework :: Django :: 1.11",
+    "Framework :: Django :: 2.0",
+    "Framework :: Django :: 2.1",
+    "Framework :: Django :: 2.2",
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+django-fsm = "^2.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+flake8 = {version = "^3.7",allows-prereleases = true}
+flake8-isort = {version = "^2.7",allows-prereleases = true}
+flake8-builtins = {version = "^1.4",allows-prereleases = true}
+black = {version = "^18.3-alpha.0",allows-prereleases = true}
+isort = {version = "^4.3",allows-prereleases = true}
+ipdb = {version = "^0.12.0",allows-prereleases = true}
+pre-commit = {version = "^1.15",allows-prereleases = true}
+django = {version = "^2.2",allows-prereleases = true}
+flake8-comprehensions = "^2.1"
+flake8-pep3101 = "^1.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
