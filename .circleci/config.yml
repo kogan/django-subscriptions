@@ -20,7 +20,6 @@ workflows:
 
   deployment-workflow:
     jobs:
-      # Runs build and test, but now just on Git tags (created from a GitHub release)
       - build:
           filters:
             tags:
@@ -38,8 +37,7 @@ workflows:
             branches:
               ignore: /.*/
 
-      # Runs the deployment job, just with the tags as well
-      - deployment:
+      - deploy:
           requires:
             - test-version
           filters:
