@@ -180,3 +180,13 @@ Note:
 
     You must have python3.6 available on your path, as it is required for some
     of the hooks.
+
+
+## Publishing a new version
+
+1. Bump the version number in pyproject.toml and src/subscriptions/init.py
+2. Commit and push to master
+3. From github, [create a new release](https://github.com/kogan/django-subscriptions/releases)
+4. Name the release "v<maj.minor.patch>" using the version number from step 1.
+5. Publish the release
+6. If the release successfully builds, circleci will publish the new package to pypi
