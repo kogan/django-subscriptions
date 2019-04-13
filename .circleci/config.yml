@@ -13,8 +13,7 @@ workflows:
           version: "3.7"
           requires:
             - build
-      - test-version:
-          version: "2.7"
+      - test-p2:
           requires:
             - build
 
@@ -55,6 +54,7 @@ jobs:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
+            - pre-commit-dot-cache-{{ checksum ".pre-commit-config.yaml" }}
       - run:
           name: Install Dependencies
           command: |
@@ -63,6 +63,10 @@ jobs:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
+      - save_cache:
+          key: pre-commit-dot-cache-{{ checksum ".pre-commit-config.yaml" }}
+          paths:
+            - /home/circleci/.cache/pre-commit
       - run:
           name: Linting
           command: |
@@ -92,6 +96,27 @@ jobs:
           name: Tests
           command: |
             poetry run true
+
+  test-py2:
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-py2-django11-fsm26
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install --user django~=1.11 django-fsm~=2.6
+      - save_cache:
+          key: deps-py2-django11-fsm26
+          paths:
+            - /home/circleci/.cache/pip/
+      - run:
+          name: Tests
+          command: |
+            python -c "import django; print(django.get_version())"
 
   deploy:
     docker:
