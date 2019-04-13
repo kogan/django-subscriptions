@@ -1,5 +1,6 @@
 # django-subscriptions
-A django package for managing subscription states
+
+A django package for managing the status and terms of a subscription.
 
 [![CircleCI](https://circleci.com/gh/kogan/django-subscriptions.svg?style=svg)](https://circleci.com/gh/kogan/django-subscriptions)
 
@@ -8,13 +9,155 @@ A django package for managing subscription states
 - Django: 1.11 and 2.2 (LTS versions only)
 - Python: 2.7 and 3.6+
 
-Other Django or Python versions **may** work, but that is totally cooincidental,
+Other Django or Python versions **may** work, but that is totally cooincidental
 and no effort is made to maintain compatibility with versions other than those
 listed above.
 
 ## Installation
 
-Pip: `pip install django-subscriptions`
+```bash
+$ pip install django-subscriptions
+```
+
+Then add the following packages to `INSTALLED_APPS` in your settings:
+
+```
+INSTALLED_APPS = [
+    ...
+    "django_fsm_log",
+    "subscriptions.apps.SubscriptionsConfig",
+    ...
+]
+```
+
+And of course, you'll need to run the migrations:
+
+```
+$ python manage.py migrate
+```
+
+You'll also need to setup the triggers, which can be scheduled with celery or
+run from a management task. See the [Triggers](#triggers) section below.
+
+## Design
+
+Manages subscriptions in a single table. Pushes events (signals) so that
+consumers can do the actual work required for that subscription, like billing.
+
+Subscriptions are built around a Finite State Machine model, where states and
+allowed transitions between states are well defined on the Model. To update from
+one state to another, the user calls methods on the Subscription instance. This
+way, all side-effects and actions are contained within the state methods.
+
+Subscription State must not be modified directly.
+
+When a state change is triggered, the subscription will publish relevant signals
+so that interested parties can, themselves, react to the state changes.
+
+![State Diagram](subscriptions-state-diagram.png)
+
+## API
+
+There are 3 major API components. State change methods, signals/events, and the
+triggers used to begin the state changes.
+
+### State Methods
+
+
+| Method                    	| Source States                   	| Target State 	| Signal Emitted       	|
+|-------------------------- 	|---------------------------------	|--------------	|----------------------	|
+| `cancel_autorenew()`      	| ACTIVE                          	| EXPIRING     	| `autorenew_canceled` 	|
+| `enable_autorenew()`      	| EXPIRING                        	| ACTIVE       	| `autorenew_enabled`  	|
+| `renew()`                 	| ACTIVE,SUSPENDED                	| RENEWING     	| `subscription_due`   	|
+| `renewed()`               	| RENEWING,ERROR                  	| ACTIVE       	| `subscription_renewed`	|
+| `renewal_failed(reason="")`	| RENEWING,ERROR                  	| SUSPENDED    	| `renewal_failed`     	|
+| `end_subscription()`      	| ACTIVE,SUSPENDED,EXPIRING,ERROR 	| ENDED        	| `subscription_ended` 	|
+| `state_unknown(reason="")`	| RENEWING                        	| ERROR        	| `subscription_error` 	|
+
+Example:
+
+`subscription.renew()` may only be called if `subscription.state` is either `ACTIVE` or `SUSPENDED`,
+and will cause `subscription.state` to move into the `RENEWING` state.
+
+
+### Triggers
+
+There are a bunch of triggers that are used to update subscriptions as they become
+due or expire. Nothing is configured to run these triggers by default. You can
+either call them as part of your own process, or use `celery beat` to execute
+the triggers using the tasks provided in `subscriptions.tasks`.
+
+
+Create a new subscription:
+
+```
+Subscription.objects.add_subscription(start_date, end_date, reference) -> Subscription
+```
+
+Trigger subscriptions that are due for renewal:
+
+```
+Subscription.objects.trigger_renewals() -> int  # number of renewals sent
+```
+
+Trigger subscriptions that are due to expire:
+
+```
+Subscription.objects.trigger_expiring() -> int  # number of expirations
+```
+
+Trigger subscriptions that have been suspended for longer than `timeout_days` to
+expire:
+
+```
+Subscription.objects.trigger_suspended_timeout(timeout_days=3) -> int  # number of suspensions
+```
+
+Trigger subscriptions that have been stuck in renewing state for longer than `timeout_hours`
+to be marked as an error:
+
+```
+Subscription.objects.trigger_stuck(timeout_hours=2) -> int  # number of error subscriptions
+```
+
+
+### Tasks
+
+The following tasks are defined but are not scheduled:
+
+```
+subscriptions.tasks.trigger_renewals
+subscriptions.tasks.trigger_expiring
+subscriptions.tasks.trigger_suspended_timeout
+subscriptions.tasks.trigger_stuck
+```
+
+If you'd like to schedule the tasks, do so with a celery beat configuration like this:
+
+```
+# settings.py
+
+CELERYBEAT_SCHEDULE = {
+    "subscriptions_renewals": {
+        "task": "subscriptions.tasks.trigger_renewals",
+        "schedule": crontab(hour=0, minute=10),
+    },
+    "subscriptions_expiring": {
+        "task": "subscriptions.tasks.trigger_expiring",
+        "schedule": crontab(hour=0, minute=15),
+    },
+    "subscriptions_suspended": {
+        "task": "subscriptions.tasks.trigger_suspended_timeout",
+        "schedule": crontab(hour=0, minute=40),
+        "kwargs": {"days": 3},
+    },
+    "subscriptions_stuck": {
+        "task": "subscriptions.tasks.trigger_stuck",
+        "schedule": crontab(hour="*/2", minute=50),
+        "kwargs": {"hours": 2},
+    },
+}
+```
 
 ## Contributing
 
@@ -37,7 +180,3 @@ Note:
 
     You must have python3.6 available on your path, as it is required for some
     of the hooks.
-
-## Usage:
-
-TODO

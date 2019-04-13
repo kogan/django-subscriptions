@@ -95,7 +95,7 @@ jobs:
       - run:
           name: Tests
           command: |
-            poetry run true
+            poetry run python runtests.py
 
   test-py2:
     docker:
@@ -104,19 +104,19 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-py2-django11-fsm26
+            - deps-{{ checksum "tests/requirements.txt" }}
       - run:
           name: Install Dependencies
           command: |
-            pip install --user django~=1.11 django-fsm~=2.6
+            pip install --user -r tests/requirements.txt
       - save_cache:
-          key: deps-py2-django11-fsm26
+          key: deps-{{ checksum "tests/requirements.txt" }}
           paths:
             - /home/circleci/.cache/pip/
       - run:
           name: Tests
           command: |
-            python -c "import django; print(django.get_version())"
+            python runtests.py
 
   deploy:
     docker:

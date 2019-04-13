@@ -1,5 +1,16 @@
 [[package]]
 category = "dev"
+description = "Low-level AMQP client for Python (fork of amqplib)."
+name = "amqp"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.4.2"
+
+[package.dependencies]
+vine = ">=1.1.3"
+
+[[package]]
+category = "dev"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
 optional = false
@@ -45,6 +56,14 @@ version = "0.1.0"
 
 [[package]]
 category = "dev"
+description = "Python multiprocessing fork with improvements and bugfixes"
+name = "billiard"
+optional = false
+python-versions = "*"
+version = "3.6.0.0"
+
+[[package]]
+category = "dev"
 description = "The uncompromising code formatter."
 name = "black"
 optional = false
@@ -56,6 +75,20 @@ appdirs = "*"
 attrs = ">=17.4.0"
 click = ">=6.5"
 toml = ">=0.9.4"
+
+[[package]]
+category = "dev"
+description = "Distributed Task Queue."
+name = "celery"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "4.3.0"
+
+[package.dependencies]
+billiard = ">=3.6.0,<4.0"
+kombu = ">=4.4.0,<5.0"
+pytz = ">0.0-dev"
+vine = ">=1.3.0"
 
 [[package]]
 category = "dev"
@@ -95,7 +128,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "4.4.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 name = "django"
 optional = false
@@ -108,11 +141,36 @@ sqlparse = "*"
 
 [[package]]
 category = "main"
+description = "A helper class for handling configuration defaults of packaged apps gracefully."
+name = "django-appconf"
+optional = false
+python-versions = "*"
+version = "1.0.3"
+
+[package.dependencies]
+django = "*"
+six = "*"
+
+[[package]]
+category = "main"
 description = "Django friendly finite state machine support."
 name = "django-fsm"
 optional = false
 python-versions = "*"
 version = "2.6.0"
+
+[[package]]
+category = "main"
+description = "Logging for django-fsm"
+name = "django-fsm-log"
+optional = false
+python-versions = "*"
+version = "1.6.2"
+
+[package.dependencies]
+django = ">=1.8"
+django-appconf = "*"
+django-fsm = ">=2"
 
 [[package]]
 category = "dev"
@@ -278,11 +336,34 @@ parso = ">=0.3.0"
 
 [[package]]
 category = "dev"
+description = "Messaging library for Python."
+name = "kombu"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "4.5.0"
+
+[package.dependencies]
+amqp = ">=2.4.0,<3.0"
+
+[[package]]
+category = "dev"
 description = "McCabe checker, plugin for flake8"
 name = "mccabe"
 optional = false
 python-versions = "*"
 version = "0.6.1"
+
+[[package]]
+category = "dev"
+description = "Rolling backport of unittest.mock for all Pythons"
+name = "mock"
+optional = false
+python-versions = "*"
+version = "2.0.0"
+
+[package.dependencies]
+pbr = ">=0.11"
+six = ">=1.9"
 
 [[package]]
 category = "dev"
@@ -300,6 +381,14 @@ name = "parso"
 optional = false
 python-versions = "*"
 version = "0.4.0"
+
+[[package]]
+category = "dev"
+description = "Python Build Reasonableness"
+name = "pbr"
+optional = false
+python-versions = "*"
+version = "5.1.3"
 
 [[package]]
 category = "dev"
@@ -393,7 +482,7 @@ python-versions = "*"
 version = "2.3.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "World timezone definitions, modern and historical"
 name = "pytz"
 optional = false
@@ -409,7 +498,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "5.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -417,7 +506,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "1.12.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Non-validating SQL parser"
 name = "sqlparse"
 optional = false
@@ -456,6 +545,14 @@ six = "*"
 
 [[package]]
 category = "dev"
+description = "Promises, promises, promises."
+name = "vine"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.3.0"
+
+[[package]]
+category = "dev"
 description = "Virtual Python Environment builder"
 name = "virtualenv"
 optional = false
@@ -480,22 +577,27 @@ python-versions = ">=2.7"
 version = "0.3.3"
 
 [metadata]
-content-hash = "dd96730310db243aa386c4d4407af5a91e10b6fe8669e931106b2a2e20604e8e"
+content-hash = "020b4827e2e29db83e4efc18bb7e513c39a9cc055d6cfed35f1a452ca761bc7a"
 python-versions = ">=3.6"
 
 [metadata.hashes]
+amqp = ["043beb485774ca69718a35602089e524f87168268f0d1ae115f28b88d27f92d7", "35a3b5006ca00b21aaeec8ceea07130f07b902dd61bfe42815039835f962f5f1"]
 appdirs = ["9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92", "d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"]
 appnope = ["5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"]
 "aspy.yaml" = ["ae249074803e8b957c83fdd82a99160d0d6d26dff9ba81ba608b42eebd7d8cd3", "c7390d79f58eb9157406966201abf26da0d56c07e0ff0deadc39c8f4dbc13482"]
 attrs = ["69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79", "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"]
 backcall = ["38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4", "bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2"]
+billiard = ["756bf323f250db8bf88462cd042c992ba60d8f5e07fc5636c24ba7d6f4261d84"]
 black = ["817243426042db1d36617910df579a54f1afd659adb96fc5032fcf4b36209739", "e030a9a28f542debc08acceb273f228ac422798e5215ba2a791a6ddeaaca22a5"]
+celery = ["4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9", "528e56767ae7e43a16cfef24ee1062491f5754368d38fcfffa861cdb9ef219be"]
 cfgv = ["6e9f2feea5e84bc71e56abd703140d7a2c250fc5ba38b8702fd6a68ed4e3b2ef", "e7f186d4a36c099a9e20b04ac3108bd8bb9b9257e692ce18c8c3764d5cb12172"]
 click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"]
 colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", "f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"]
 decorator = ["86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de", "f069f3a01830ca754ba5258fde2278454a0b5b79e0d7f5c13b3b97e57d4acff6"]
 django = ["7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119", "a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"]
+django-appconf = ["35f13ca4d567f132b960e2cd4c832c2d03cb6543452d34e29b7ba10371ba80e3", "c98a7af40062e996b921f5962a1c4f3f0c979fa7885f7be4710cceb90ebe13a6"]
 django-fsm = ["13da2fbec4284dcf2235157c299306f67b788bd39126bed3cdbcc6a8f17575e9", "c4790469e4f54b6cc95a3ac2c1bd1cdadeb04b0f3578e2472cdd857543a56e67"]
+django-fsm-log = ["2b0fe39953c74a7142965aae842ac77fd038b860da43391e5804d9e617089ea8", "98b729167954b8aaa8871c649c67173554a5e945eeb33fdc3a3f73af905a76f7"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
 flake8-builtins = ["8d806360767947c0035feada4ddef3ede32f0a586ef457e62d811b8456ad9a51", "cd7b1b7fec4905386a3643b59f9ca8e305768da14a49a7efb31fe9364f33cd04"]
@@ -510,9 +612,12 @@ ipython = ["b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b", "
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]
 isort = ["01cb7e1ca5e6c5b3f235f0385057f70558b70d2f00320208825fa62887292f43", "268067462aed7eb2a1e237fcb287852f22077de3fb07964e87e00f829eea2d1a"]
 jedi = ["2bb0603e3506f708e792c7f4ad8fc2a7a9d9c2d292a358fbbd58da531695595b", "2c6bcd9545c7d6440951b12b44d373479bf18123a401a52025cf98563fbd826c"]
+kombu = ["389ba09e03b15b55b1a7371a441c894fd8121d174f5583bbbca032b9ea8c9edd", "7b92303af381ef02fad6899fd5f5a9a96031d781356cd8e505fa54ae5ddee181"]
 mccabe = ["ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42", "dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"]
+mock = ["5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1", "b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba"]
 nodeenv = ["ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a"]
 parso = ["17cc2d7a945eb42c3569d4564cdf49bde221bc2b552af3eca9c1aad517dcdd33", "2e9574cb12e7112a87253e14e2c380ce312060269d04bd018478a3c92ea9a376"]
+pbr = ["8257baf496c8522437e8a6cfe0f15e00aedc6c0e0e7c9d55eeeeab31e0853843", "8c361cc353d988e4f5b998555c88098b9d5964c2e11acf7b0d21925a66bb5824"]
 pexpect = ["2094eefdfcf37a1fdbfb9aa090862c1a4878e5c7e0e7e7088bdb511c558e5cd1", "9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb"]
 pickleshare = ["87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca", "9649af414d74d4df115d5d718f82acb59c9d418196b7b4290ed47a12ce62df56"]
 pre-commit = ["75a9110eae00d009c913616c0fc8a6a02e7716c4a29a14cac9b313d2c7338ab0", "f882c65316eb5b705fe4613e92a7c91055c1800102e4d291cfd18912ec9cf90e"]
@@ -528,6 +633,7 @@ sqlparse = ["40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177", 
 testfixtures = ["6b79324f35852eaacd4f5f440b20ee1b98df23001ff88db8b8bde3746f753f0a", "c0028d2acd45e6604d359b806132af05815d64e882cf995fa45e6814ddaade13"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 traitlets = ["9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835", "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"]
+vine = ["133ee6d7a9016f177ddeaf191c1f58421a1dcc6ee9a42c58b34bed40e1d2cd87", "ea4947cc56d1fd6f2095c8d543ee25dad966f78692528e68b4fada11ba3f98af"]
 virtualenv = ["6aebaf4dd2568a0094225ebbca987859e369e3e5c22dc7d52e5406d504890417", "984d7e607b0a5d1329425dd8845bd971b957424b5ba664729fab51ab8c11bc39"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 zipp = ["55ca87266c38af6658b84db8cfb7343cdb0bf275f93c7afaea0d8e7a209c7478", "682b3e1c62b7026afe24eadf6be579fb45fec54c07ea218bded8092af07a68c4"]
