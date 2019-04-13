@@ -7,16 +7,16 @@ workflows:
       - build
       - test-version:
           version: "3.6"
-          name: "Python 3.6"
+          name: "python3.6"
           requires:
             - build
       - test-version:
           version: "3.7"
-          name: "Python 3.7"
+          name: "python3.7"
           requires:
             - build
       - test-py2:
-          name: "Python 2.7"
+          name: "python2.7"
           requires:
             - build
 
@@ -31,7 +31,7 @@ workflows:
 
       - test-version:
           version: "3.6"
-          name: "Python 3.6"
+          name: "python3.6"
           requires:
             - build
           filters:
@@ -42,7 +42,7 @@ workflows:
 
       - deploy:
           requires:
-            - test-version
+            - python3.6
           filters:
               tags:
                 only: /v[0-9]+(\.[0-9]+)*/
