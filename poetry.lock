@@ -12,6 +12,7 @@ vine = ">=1.1.3"
 [[package]]
 category = "dev"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
+marker = "python_version >= \"3.6\""
 name = "appdirs"
 optional = false
 python-versions = "*"
@@ -20,7 +21,7 @@ version = "1.4.3"
 [[package]]
 category = "dev"
 description = "Disable App Nap on OS X 10.9"
-marker = "python_version >= \"3.4\" and sys_platform == \"darwin\""
+marker = "python_version == \"2.7\" and sys_platform == \"darwin\" or python_version >= \"3.4\" and sys_platform == \"darwin\""
 name = "appnope"
 optional = false
 python-versions = "*"
@@ -40,6 +41,7 @@ pyyaml = "*"
 [[package]]
 category = "dev"
 description = "Classes Without Boilerplate"
+marker = "python_version >= \"3.6\""
 name = "attrs"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -56,6 +58,24 @@ version = "0.1.0"
 
 [[package]]
 category = "dev"
+description = "backports.functools_lru_cache"
+marker = "python_version < \"3.2\""
+name = "backports.functools-lru-cache"
+optional = false
+python-versions = ">=2.6"
+version = "1.5"
+
+[[package]]
+category = "dev"
+description = "A backport of the get_terminal_size function from Python 3.3's shutil."
+marker = "python_version == \"2.7\""
+name = "backports.shutil-get-terminal-size"
+optional = false
+python-versions = "*"
+version = "1.0.0"
+
+[[package]]
+category = "dev"
 description = "Python multiprocessing fork with improvements and bugfixes"
 name = "billiard"
 optional = false
@@ -65,6 +85,7 @@ version = "3.6.0.0"
 [[package]]
 category = "dev"
 description = "The uncompromising code formatter."
+marker = "python_version >= \"3.6\""
 name = "black"
 optional = false
 python-versions = ">=3.6"
@@ -104,6 +125,7 @@ six = "*"
 [[package]]
 category = "dev"
 description = "Composable command line interface toolkit"
+marker = "python_version >= \"3.6\""
 name = "click"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -112,7 +134,7 @@ version = "7.0"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "python_version >= \"3.4\" and sys_platform == \"win32\""
+marker = "python_version == \"2.7\" and sys_platform == \"win32\" or python_version >= \"3.4\" and sys_platform == \"win32\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -120,12 +142,41 @@ version = "0.4.1"
 
 [[package]]
 category = "dev"
+description = "Updated configparser from Python 3.7 for Python 2.6+."
+marker = "python_version < \"3.2\""
+name = "configparser"
+optional = false
+python-versions = ">=2.6"
+version = "3.7.4"
+
+[[package]]
+category = "dev"
+description = "Backports and enhancements for the contextlib module"
+marker = "python_version < \"3\""
+name = "contextlib2"
+optional = false
+python-versions = "*"
+version = "0.5.5"
+
+[[package]]
+category = "dev"
 description = "Better living through Python with decorators"
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "decorator"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "4.4.0"
+
+[[package]]
+category = "main"
+description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
+name = "django"
+optional = false
+python-versions = "*"
+version = "1.11.20"
+
+[package.dependencies]
+pytz = "*"
 
 [[package]]
 category = "main"
@@ -180,6 +231,20 @@ optional = false
 python-versions = ">=2.7"
 version = "0.3"
 
+[package.dependencies]
+[package.dependencies.configparser]
+python = ">=2.7,<2.8"
+version = ">=3.5"
+
+[[package]]
+category = "main"
+description = "Python 3.4 Enum backported to 3.3, 3.2, 3.1, 2.7, 2.6, 2.5, and 2.4"
+marker = "python_version >= \"2.7\" and python_version < \"2.8\" or python_version < \"3.4\""
+name = "enum34"
+optional = false
+python-versions = "*"
+version = "1.1.6"
+
 [[package]]
 category = "dev"
 description = "the modular source code checker: pep8, pyflakes and co"
@@ -193,6 +258,22 @@ entrypoints = ">=0.3.0,<0.4.0"
 mccabe = ">=0.6.0,<0.7.0"
 pycodestyle = ">=2.5.0,<2.6.0"
 pyflakes = ">=2.1.0,<2.2.0"
+
+[package.dependencies.configparser]
+python = "<3.2"
+version = "*"
+
+[package.dependencies.enum34]
+python = "<3.4"
+version = "*"
+
+[package.dependencies.functools32]
+python = "<3.2"
+version = "*"
+
+[package.dependencies.typing]
+python = "<3.5"
+version = "*"
 
 [[package]]
 category = "dev"
@@ -210,8 +291,8 @@ category = "dev"
 description = "A flake8 plugin to help you write better list/set/dict comprehensions."
 name = "flake8-comprehensions"
 optional = false
-python-versions = ">=3.4"
-version = "2.1.0"
+python-versions = "*"
+version = "1.4.1"
 
 [package.dependencies]
 flake8 = "!=3.2.0"
@@ -242,6 +323,33 @@ flake8 = ">=3.0"
 
 [[package]]
 category = "dev"
+description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+"
+marker = "python_version < \"3.3\""
+name = "funcsigs"
+optional = false
+python-versions = "*"
+version = "1.0.2"
+
+[[package]]
+category = "dev"
+description = "Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy."
+marker = "python_version < \"3.2\""
+name = "functools32"
+optional = false
+python-versions = "*"
+version = "3.2.3-2"
+
+[[package]]
+category = "dev"
+description = "Backport of the concurrent.futures package from Python 3"
+marker = "python_version < \"3.2\""
+name = "futures"
+optional = false
+python-versions = ">=2.6, <3"
+version = "3.2.0"
+
+[[package]]
+category = "dev"
 description = "File identification library for Python"
 name = "identify"
 optional = false
@@ -259,6 +367,18 @@ version = "0.9"
 [package.dependencies]
 zipp = ">=0.3.2"
 
+[package.dependencies.configparser]
+python = "<3"
+version = "*"
+
+[package.dependencies.contextlib2]
+python = "<3"
+version = "*"
+
+[package.dependencies.pathlib2]
+python = "<3"
+version = "*"
+
 [[package]]
 category = "dev"
 description = "Read resources from Python packages"
@@ -267,6 +387,15 @@ name = "importlib-resources"
 optional = false
 python-versions = ">=2.7,!=3.0,!=3.1,!=3.2,!=3.3"
 version = "1.0.2"
+
+[package.dependencies]
+[package.dependencies.pathlib2]
+python = "<3"
+version = "*"
+
+[package.dependencies.typing]
+python = "<3.5"
+version = "*"
 
 [[package]]
 category = "dev"
@@ -278,10 +407,46 @@ version = "0.12"
 
 [package.dependencies]
 setuptools = "*"
+[[package.dependencies.ipython]]
+python = ">=2.7,<2.8"
+version = ">=5.1.0,<6.0.0"
 
-[package.dependencies.ipython]
+[[package.dependencies.ipython]]
 python = ">=3.4"
 version = ">=5.1.0"
+
+[[package]]
+category = "dev"
+description = "IPython: Productive Interactive Computing"
+marker = "python_version == \"2.7\""
+name = "ipython"
+optional = false
+python-versions = "*"
+version = "5.8.0"
+
+[package.dependencies]
+appnope = "*"
+colorama = "*"
+decorator = "*"
+pexpect = "*"
+pickleshare = "*"
+prompt-toolkit = ">=1.0.4,<2.0.0"
+pygments = "*"
+setuptools = ">=18.5"
+simplegeneric = ">0.8"
+traitlets = ">=4.2"
+
+[package.dependencies."backports.shutil-get-terminal-size"]
+python = ">=2.7,<2.8"
+version = "*"
+
+[package.dependencies.pathlib2]
+python = ">=2.7,<2.8 || >=3.3,<3.4"
+version = "*"
+
+[package.dependencies.win-unicode-console]
+python = "<3.6"
+version = ">=0.5"
 
 [[package]]
 category = "dev"
@@ -308,7 +473,7 @@ traitlets = ">=4.2"
 [[package]]
 category = "dev"
 description = "Vestigial utilities from IPython"
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "ipython-genutils"
 optional = false
 python-versions = "*"
@@ -321,6 +486,15 @@ name = "isort"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.3.17"
+
+[package.dependencies]
+[package.dependencies."backports.functools-lru-cache"]
+python = "<3.2"
+version = "*"
+
+[package.dependencies.futures]
+python = "<3.2"
+version = "*"
 
 [[package]]
 category = "dev"
@@ -365,6 +539,10 @@ version = "2.0.0"
 pbr = ">=0.11"
 six = ">=1.9"
 
+[package.dependencies.funcsigs]
+python = "<3.3"
+version = ">=1"
+
 [[package]]
 category = "dev"
 description = "Node.js virtual environment builder"
@@ -384,6 +562,22 @@ version = "0.4.0"
 
 [[package]]
 category = "dev"
+description = "Object-oriented filesystem paths"
+marker = "python_version < \"3\" or python_version == \"2.7\""
+name = "pathlib2"
+optional = false
+python-versions = "*"
+version = "2.3.3"
+
+[package.dependencies]
+six = "*"
+
+[package.dependencies.scandir]
+python = "<3.5"
+version = "*"
+
+[[package]]
+category = "dev"
 description = "Python Build Reasonableness"
 name = "pbr"
 optional = false
@@ -393,7 +587,7 @@ version = "5.1.3"
 [[package]]
 category = "dev"
 description = "Pexpect allows easy control of interactive console applications."
-marker = "python_version >= \"3.4\" and sys_platform != \"win32\""
+marker = "python_version == \"2.7\" and sys_platform != \"win32\" or python_version >= \"3.4\" and sys_platform != \"win32\""
 name = "pexpect"
 optional = false
 python-versions = "*"
@@ -405,11 +599,16 @@ ptyprocess = ">=0.5"
 [[package]]
 category = "dev"
 description = "Tiny 'shelve'-like database with concurrency support"
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "pickleshare"
 optional = false
 python-versions = "*"
 version = "0.7.5"
+
+[package.dependencies]
+[package.dependencies.pathlib2]
+python = ">=2.6.0,<2.8.0 || >=3.2.0,<3.4.0"
+version = "*"
 
 [[package]]
 category = "dev"
@@ -430,9 +629,26 @@ six = "*"
 toml = "*"
 virtualenv = ">=15.2"
 
+[package.dependencies.futures]
+python = "<3.2"
+version = "*"
+
 [package.dependencies.importlib-resources]
 python = "<3.7"
 version = "*"
+
+[[package]]
+category = "dev"
+description = "Library for building powerful interactive command lines in Python"
+marker = "python_version == \"2.7\""
+name = "prompt-toolkit"
+optional = false
+python-versions = "*"
+version = "1.0.16"
+
+[package.dependencies]
+six = ">=1.9.0"
+wcwidth = "*"
 
 [[package]]
 category = "dev"
@@ -450,7 +666,7 @@ wcwidth = "*"
 [[package]]
 category = "dev"
 description = "Run a subprocess in a pseudo terminal"
-marker = "python_version >= \"3.4\" and sys_platform != \"win32\""
+marker = "python_version == \"2.7\" and sys_platform != \"win32\" or python_version >= \"3.4\" and sys_platform != \"win32\""
 name = "ptyprocess"
 optional = false
 python-versions = "*"
@@ -475,7 +691,7 @@ version = "2.1.1"
 [[package]]
 category = "dev"
 description = "Pygments is a syntax highlighting package written in Python."
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "pygments"
 optional = false
 python-versions = "*"
@@ -496,6 +712,24 @@ name = "pyyaml"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "5.1"
+
+[[package]]
+category = "dev"
+description = "scandir, a better directory iterator and faster os.walk()"
+marker = "python_version < \"3\" or python_version == \"2.7\""
+name = "scandir"
+optional = false
+python-versions = "*"
+version = "1.10.0"
+
+[[package]]
+category = "dev"
+description = "Simple generic functions (similar to Python's own len(), pickle.dump(), etc.)"
+marker = "python_version == \"2.7\""
+name = "simplegeneric"
+optional = false
+python-versions = "*"
+version = "0.8.1"
 
 [[package]]
 category = "main"
@@ -532,7 +766,7 @@ version = "0.10.0"
 [[package]]
 category = "dev"
 description = "Traitlets Python config system"
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "traitlets"
 optional = false
 python-versions = "*"
@@ -542,6 +776,19 @@ version = "4.3.2"
 decorator = "*"
 ipython-genutils = "*"
 six = "*"
+
+[package.dependencies.enum34]
+python = ">=2.7,<2.8"
+version = "*"
+
+[[package]]
+category = "dev"
+description = "Type Hints for Python"
+marker = "python_version < \"3.5\""
+name = "typing"
+optional = false
+python-versions = "*"
+version = "3.6.6"
 
 [[package]]
 category = "dev"
@@ -562,11 +809,20 @@ version = "16.4.3"
 [[package]]
 category = "dev"
 description = "Measures number of Terminal column cells of wide-character codes"
-marker = "python_version >= \"3.4\""
+marker = "python_version == \"2.7\" or python_version >= \"3.4\""
 name = "wcwidth"
 optional = false
 python-versions = "*"
 version = "0.1.7"
+
+[[package]]
+category = "dev"
+description = "Enable Unicode input and display when running Python from Windows console."
+marker = "sys_platform == \"win32\" and python_version == \"2.7\""
+name = "win-unicode-console"
+optional = false
+python-versions = "*"
+version = "0.5"
 
 [[package]]
 category = "dev"
@@ -577,8 +833,8 @@ python-versions = ">=2.7"
 version = "0.3.3"
 
 [metadata]
-content-hash = "107ffd97459aba7abccb773afec21f7efee3208912bdaecaef639f4e9d485df3"
-python-versions = ">=3.6"
+content-hash = "9e450bea18695e839883585b1b14a8fd3e51bd49566afe7f4e6cff8e17f684f3"
+python-versions = "~2.7 || >=3.6"
 
 [metadata.hashes]
 amqp = ["043beb485774ca69718a35602089e524f87168268f0d1ae115f28b88d27f92d7", "35a3b5006ca00b21aaeec8ceea07130f07b902dd61bfe42815039835f962f5f1"]
@@ -587,28 +843,36 @@ appnope = ["5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "
 "aspy.yaml" = ["ae249074803e8b957c83fdd82a99160d0d6d26dff9ba81ba608b42eebd7d8cd3", "c7390d79f58eb9157406966201abf26da0d56c07e0ff0deadc39c8f4dbc13482"]
 attrs = ["69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79", "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"]
 backcall = ["38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4", "bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2"]
+"backports.functools-lru-cache" = ["9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a", "f0b0e4eba956de51238e17573b7087e852dfe9854afd2e9c873f73fc0ca0a6dd"]
+"backports.shutil-get-terminal-size" = ["0975ba55054c15e346944b38956a4c9cbee9009391e41b86c68990effb8c1f64", "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80"]
 billiard = ["756bf323f250db8bf88462cd042c992ba60d8f5e07fc5636c24ba7d6f4261d84"]
 black = ["817243426042db1d36617910df579a54f1afd659adb96fc5032fcf4b36209739", "e030a9a28f542debc08acceb273f228ac422798e5215ba2a791a6ddeaaca22a5"]
 celery = ["4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9", "528e56767ae7e43a16cfef24ee1062491f5754368d38fcfffa861cdb9ef219be"]
 cfgv = ["6e9f2feea5e84bc71e56abd703140d7a2c250fc5ba38b8702fd6a68ed4e3b2ef", "e7f186d4a36c099a9e20b04ac3108bd8bb9b9257e692ce18c8c3764d5cb12172"]
 click = ["2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13", "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"]
 colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", "f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"]
+configparser = ["8be81d89d6e7b4c0d4e44bcc525845f6da25821de80cb5e06e7e0238a2899e32", "da60d0014fd8c55eb48c1c5354352e363e2d30bbf7057e5e171a468390184c75"]
+contextlib2 = ["509f9419ee91cdd00ba34443217d5ca51f5a364a404e1dce9e8979cea969ca48", "f5260a6e679d2ff42ec91ec5252f4eeffdcf21053db9113bd0a8e4d953769c00"]
 decorator = ["86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de", "f069f3a01830ca754ba5258fde2278454a0b5b79e0d7f5c13b3b97e57d4acff6"]
-django = ["7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119", "a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"]
+django = ["0a73696e0ac71ee6177103df984f9c1e07cd297f080f8ec4dc7c6f3fb74395b5", "43a99da08fee329480d27860d68279945b7d8bf7b537388ee2c8938c709b2041", "7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119", "a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"]
 django-appconf = ["35f13ca4d567f132b960e2cd4c832c2d03cb6543452d34e29b7ba10371ba80e3", "c98a7af40062e996b921f5962a1c4f3f0c979fa7885f7be4710cceb90ebe13a6"]
 django-fsm = ["13da2fbec4284dcf2235157c299306f67b788bd39126bed3cdbcc6a8f17575e9", "c4790469e4f54b6cc95a3ac2c1bd1cdadeb04b0f3578e2472cdd857543a56e67"]
 django-fsm-log = ["2b0fe39953c74a7142965aae842ac77fd038b860da43391e5804d9e617089ea8", "98b729167954b8aaa8871c649c67173554a5e945eeb33fdc3a3f73af905a76f7"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
+enum34 = ["2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850", "644837f692e5f550741432dd3f223bbb9852018674981b1664e5dc339387588a", "6bd0f6ad48ec2aa117d3d141940d484deccda84d4fcd884f5c3d93c23ecd8c79", "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1"]
 flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
 flake8-builtins = ["8d806360767947c0035feada4ddef3ede32f0a586ef457e62d811b8456ad9a51", "cd7b1b7fec4905386a3643b59f9ca8e305768da14a49a7efb31fe9364f33cd04"]
-flake8-comprehensions = ["35f826956e87f230415cde9c3b8b454e785736cf5ff0be551c441b41b937f699", "f0b61d983d608790abf3664830d68efd3412265c2d10f6a4ba1a353274dbeb64"]
+flake8-comprehensions = ["b83891fec0e680b07aa1fd92e53eb6993be29a0f3673a09badbe8da307c445e0", "e4ccf1627f75f192eb7fde640f5edb81c98d04b1390df9d4145ffd7710bb1ef2"]
 flake8-isort = ["1e67b6b90a9b980ac3ff73782087752d406ce0a729ed928b92797f9fa188917e", "81a8495eefed3f2f63f26cd2d766c7b1191e923a15b9106e6233724056572c68"]
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
+funcsigs = ["330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca", "a7bb0f2cf3a3fd1ab2732cb49eba4252c2af4240442415b4abce3b87022a8f50"]
+functools32 = ["89d824aa6c358c421a234d7f9ee0bd75933a67c29588ce50aaa3acdf4d403fa0", "f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d"]
+futures = ["9ec02aa7d674acb8618afb127e27fde7fc68994c0437ad759fa094a574adb265", "ec0a6cb848cc212002b9828c3e34c675e0c9ff6741dc445cab6fdd4e1085d1f1"]
 identify = ["244e7864ef59f0c7c50c6db73f58564151d91345cd9b76ed793458953578cadd", "8ff062f90ad4b09cfe79b5dfb7a12e40f19d2e68a5c9598a49be45f16aba7171"]
 importlib-metadata = ["46fc60c34b6ed7547e2a723fc8de6dc2e3a1173f8423246b3ce497f064e9c3de", "bc136180e961875af88b1ab85b4009f4f1278f8396a60526c0009f503a1a96ca"]
 importlib-resources = ["6e2783b2538bd5a14678284a3962b0660c715e5a0f10243fd5e00a4b5974f50b", "d3279fd0f6f847cced9f7acc19bd3e5df54d34f93a2e7bb5f238f81545787078"]
 ipdb = ["dce2112557edfe759742ca2d0fee35c59c97b0cc7a05398b791079d78f1519ce"]
-ipython = ["b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b", "f5102c1cd67e399ec8ea66bcebe6e3968ea25a8977e53f012963e5affeb1fe38"]
+ipython = ["0371b7e4bd74954a35086eac949beeac5b1c9f5ce231e2e77df2286a293765e3", "37101b8cbe072fe17bff100bc03d096404e4a9a0357097aeb5b61677c042cab1", "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906", "b038baa489c38f6d853a3cfc4c635b0cda66f2864d136fe8f40c1a6e334e2a6b", "f5102c1cd67e399ec8ea66bcebe6e3968ea25a8977e53f012963e5affeb1fe38"]
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]
 isort = ["01cb7e1ca5e6c5b3f235f0385057f70558b70d2f00320208825fa62887292f43", "268067462aed7eb2a1e237fcb287852f22077de3fb07964e87e00f829eea2d1a"]
 jedi = ["2bb0603e3506f708e792c7f4ad8fc2a7a9d9c2d292a358fbbd58da531695595b", "2c6bcd9545c7d6440951b12b44d373479bf18123a401a52025cf98563fbd826c"]
@@ -617,23 +881,28 @@ mccabe = ["ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42", "d
 mock = ["5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1", "b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba"]
 nodeenv = ["ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a"]
 parso = ["17cc2d7a945eb42c3569d4564cdf49bde221bc2b552af3eca9c1aad517dcdd33", "2e9574cb12e7112a87253e14e2c380ce312060269d04bd018478a3c92ea9a376"]
+pathlib2 = ["25199318e8cc3c25dcb45cbe084cc061051336d5a9ea2a12448d3d8cb748f742", "5887121d7f7df3603bca2f710e7219f3eca0eb69e0b7cc6e0a022e155ac931a7"]
 pbr = ["8257baf496c8522437e8a6cfe0f15e00aedc6c0e0e7c9d55eeeeab31e0853843", "8c361cc353d988e4f5b998555c88098b9d5964c2e11acf7b0d21925a66bb5824"]
 pexpect = ["2094eefdfcf37a1fdbfb9aa090862c1a4878e5c7e0e7e7088bdb511c558e5cd1", "9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb"]
 pickleshare = ["87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca", "9649af414d74d4df115d5d718f82acb59c9d418196b7b4290ed47a12ce62df56"]
 pre-commit = ["75a9110eae00d009c913616c0fc8a6a02e7716c4a29a14cac9b313d2c7338ab0", "f882c65316eb5b705fe4613e92a7c91055c1800102e4d291cfd18912ec9cf90e"]
-prompt-toolkit = ["11adf3389a996a6d45cc277580d0d53e8a5afd281d0c9ec71b28e6f121463780", "2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1", "977c6583ae813a37dc1c2e1b715892461fcbdaa57f6fc62f33a528c4886c8f55"]
+prompt-toolkit = ["1e71341526efa4b11bb44d323e687a5d9cef204aabe2907e3f0dc1534cda0ecc", "955d81315bb7a049f19cd17d1a73f1a40861483260f7dffd825e98303a8bd6b6", "c1cedd626e08b8ee830ee65897de754113ff3f3035880030c08b01674d85c5b4", "11adf3389a996a6d45cc277580d0d53e8a5afd281d0c9ec71b28e6f121463780", "2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1", "977c6583ae813a37dc1c2e1b715892461fcbdaa57f6fc62f33a528c4886c8f55"]
 ptyprocess = ["923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0", "d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"]
 pycodestyle = ["95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56", "e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c"]
 pyflakes = ["17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0", "d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2"]
 pygments = ["5ffada19f6203563680669ee7f53b64dabbeb100eb51b61996085e99c03b284a", "e8218dd399a61674745138520d0d4cf2621d7e032439341bc3f647bff125818d"]
 pytz = ["303879e36b721603cc54604edcac9d20401bdbe31e1e4fdee5b9f98d5d31dfda", "d747dd3d23d77ef44c6a3526e274af6efeb0a6f1afd5a69ba4d5be4098c8e141"]
 pyyaml = ["1adecc22f88d38052fb787d959f003811ca858b799590a5eaa70e63dca50308c", "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95", "460a5a4248763f6f37ea225d19d5c205677d8d525f6a83357ca622ed541830c2", "5a22a9c84653debfbf198d02fe592c176ea548cccce47553f35f466e15cf2fd4", "7a5d3f26b89d688db27822343dfa25c599627bc92093e788956372285c6298ad", "9372b04a02080752d9e6f990179a4ab840227c6e2ce15b95e1278456664cf2ba", "a5dcbebee834eaddf3fa7366316b880ff4062e4bcc9787b78c7fbb4a26ff2dd1", "aee5bab92a176e7cd034e57f46e9df9a9862a71f8f37cad167c6fc74c65f5b4e", "c51f642898c0bacd335fc119da60baae0824f2cde95b0330b56c0553439f0673", "c68ea4d3ba1705da1e0d85da6684ac657912679a649e8868bd850d2c299cce13", "e23d0cc5299223dcc37885dae624f382297717e459ea24053709675a976a3e19"]
+scandir = ["2586c94e907d99617887daed6c1d102b5ca28f1085f90446554abf1faf73123e", "2ae41f43797ca0c11591c0c35f2f5875fa99f8797cb1a1fd440497ec0ae4b022", "2b8e3888b11abb2217a32af0766bc06b65cc4a928d8727828ee68af5a967fa6f", "2c712840c2e2ee8dfaf36034080108d30060d759c7b73a01a52251cc8989f11f", "4d4631f6062e658e9007ab3149a9b914f3548cb38bfb021c64f39a025ce578ae", "67f15b6f83e6507fdc6fca22fedf6ef8b334b399ca27c6b568cbfaa82a364173", "7d2d7a06a252764061a020407b997dd036f7bd6a175a5ba2b345f0a357f0b3f4", "8c5922863e44ffc00c5c693190648daa6d15e7c1207ed02d6f46a8dcc2869d32", "92c85ac42f41ffdc35b6da57ed991575bdbe69db895507af88b9f499b701c188", "b24086f2375c4a094a6b51e78b4cf7ca16c721dcee2eddd7aa6494b42d6d519d", "cb925555f43060a1745d0a321cca94bcea927c50114b623d73179189a4e100ac"]
+simplegeneric = ["dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 sqlparse = ["40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177", "7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"]
 testfixtures = ["6b79324f35852eaacd4f5f440b20ee1b98df23001ff88db8b8bde3746f753f0a", "c0028d2acd45e6604d359b806132af05815d64e882cf995fa45e6814ddaade13"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 traitlets = ["9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835", "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"]
+typing = ["4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d", "57dcf675a99b74d64dacf6fba08fb17cf7e3d5fdff53d4a30ea2a5e7e52543d4", "a4c8473ce11a65999c8f59cb093e70686b6c84c98df58c1dae9b3b196089858a"]
 vine = ["133ee6d7a9016f177ddeaf191c1f58421a1dcc6ee9a42c58b34bed40e1d2cd87", "ea4947cc56d1fd6f2095c8d543ee25dad966f78692528e68b4fada11ba3f98af"]
 virtualenv = ["6aebaf4dd2568a0094225ebbca987859e369e3e5c22dc7d52e5406d504890417", "984d7e607b0a5d1329425dd8845bd971b957424b5ba664729fab51ab8c11bc39"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
+win-unicode-console = ["d4142d4d56d46f449d6f00536a73625a871cba040f0bc1a2e305a04578f07d1e"]
 zipp = ["55ca87266c38af6658b84db8cfb7343cdb0bf275f93c7afaea0d8e7a209c7478", "682b3e1c62b7026afe24eadf6be579fb45fec54c07ea218bded8092af07a68c4"]

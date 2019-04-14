@@ -48,20 +48,20 @@ classifiers = [
 
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = "~2.7 || >=3.6"
 django-fsm = "^2.6"
 django-fsm-log = "^1.6"
-enum34 = {version = "~1.1.6", python = "~2.7.0"}
+enum34 = {version = "~1.1", python = "~2.7"}
 
 [tool.poetry.dev-dependencies]
-django = ">=2.2"
+django = "~1.11 || >=2.2"
 flake8 = "^3.7"
 flake8-isort = "^2.7"
 flake8-builtins = "^1.4"
-flake8-comprehensions = "^2.1"
+flake8-comprehensions = "~1.4"
 flake8-pep3101 = "^1.2"
 isort = "^4.3"
-black = {version = "^18.3-alpha.0",allows-prereleases = true}
+black = {version = "^18.3-alpha.0",allows-prereleases = true, python = ">=3.6"}
 ipdb = "^0.12.0"
 pre-commit = "*"
 celery = "^4.3"
