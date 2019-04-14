@@ -2,6 +2,7 @@
 
 A django package for managing the status and terms of a subscription.
 
+[![PyPI version](https://badge.fury.io/py/django-subscriptions.svg)](https://badge.fury.io/py/django-subscriptions)
 [![CircleCI](https://circleci.com/gh/kogan/django-subscriptions.svg?style=svg)](https://circleci.com/gh/kogan/django-subscriptions)
 
 ## Compatibility
