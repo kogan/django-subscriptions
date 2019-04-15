@@ -57,14 +57,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-3.6-{{ checksum "poetry.lock" }}
             - pre-commit-dot-cache-{{ checksum ".pre-commit-config.yaml" }}
       - run:
           name: Install Dependencies
           command: |
             poetry install
       - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
+          key: deps-3.6-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
       - save_cache:
