@@ -80,20 +80,20 @@ jobs:
     parameters:
       version:
         type: string
-        default: "3.6.8"
+        default: "3.6"
     docker:
       - image: circleci/python:<< parameters.version >>
     steps:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-<< parameters.version >>-{{ checksum "poetry.lock" }}
       - run:
           name: Install Dependencies
           command: |
             poetry install
       - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
+          key: deps-<< parameters.version >>-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
       - run:
@@ -108,13 +108,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "tests/requirements.txt" }}
+            - deps-py27-{{ checksum "tests/requirements.txt" }}
       - run:
           name: Install Dependencies
           command: |
             pip install --user -r tests/requirements.txt
       - save_cache:
-          key: deps-{{ checksum "tests/requirements.txt" }}
+          key: deps-py27-{{ checksum "tests/requirements.txt" }}
           paths:
             - /home/circleci/.cache/pip/
       - run:
