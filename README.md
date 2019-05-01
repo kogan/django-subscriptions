@@ -185,6 +185,16 @@ Note:
     of the hooks.
 
 
+## Generating Migrations
+
+After installing all dependencies, you can generate required migration files
+like so:
+
+```bash
+$ poetry run ipython migrate.py <nameofmigration>
+```
+
+
 ## Publishing a new version
 
 1. Bump the version number in pyproject.toml and src/subscriptions/init.py
