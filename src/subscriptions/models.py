@@ -40,14 +40,32 @@ class SubscriptionManager(models.Manager):
             count += 1
         return count
 
-    def trigger_suspended_timeout(self, timeout_days=3):
+    def trigger_suspended(self):
         """
-        Finds all subscriptions that have remained in Suspended status for `timeout_days`, and begins
-        the end subscription process.
+        Finds all subscriptions that are due and suspended, and begins the renewal process.
+
+        This is useful for handling retries after a failed renewal.
         """
         count = 0
+        suspended = self.get_queryset().suspended().order_by("last_updated").iterator()
+        for subscription in suspended:
+            subscription.renew()
+            count += 1
+        return count
+
+    def trigger_suspended_timeout(self, timeout_hours=48, timeout_days=None):
+        """
+        Finds all subscriptions that have remained in Suspended status for `timeout_hours`, and begins
+        the end subscription process.
+
+        `timeout_days` is deprecated.
+        """
+        if timeout_days is not None:
+            timeout_hours = timeout_days * 24
+
+        count = 0
         suspended = (
-            self.get_queryset().suspended_timeout(timeout_days).order_by("last_updated").iterator()
+            self.get_queryset().suspended_timeout(timeout_hours).order_by("last_updated").iterator()
         )
         for subscription in suspended:
             subscription.end_subscription()
@@ -77,9 +95,15 @@ class SubscriptionQuerySet(models.QuerySet):
     def expiring(self):
         return self.filter(state=State.EXPIRING, end__lt=timezone.now())
 
-    def suspended_timeout(self, timeout_days=3):
+    def suspended(self):
+        return self.filter(state=State.SUSPENDED, end__lt=timezone.now())
+
+    def suspended_timeout(self, timeout_hours=48, timeout_days=None):
+        if timeout_days is not None:
+            timeout_hours = timeout_days * 24
+
         return self.filter(
-            state=State.SUSPENDED, last_updated__lte=timezone.now() - timedelta(days=timeout_days)
+            state=State.SUSPENDED, last_updated__lte=timezone.now() - timedelta(hours=timeout_hours)
         )
 
     def stuck(self, timeout_hours=2):

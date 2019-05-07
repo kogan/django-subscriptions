@@ -159,7 +159,25 @@ class SubscriptionTestCase(TestCase):
         self.assertEqual(not_due.state, not_due_fresh.state)
         self.assertEqual(ended.state, ended_fresh.state)
 
-    def test_trigger_suspended(self):
+    @mock.patch("subscriptions.models.signals.subscription_due.send_robust")
+    def test_trigger_suspended(self, mock_signal):
+        due = Subscription.objects.create(state=State.SUSPENDED, end=self.hours_ago)
+        not_due = Subscription.objects.create(state=State.SUSPENDED, end=self.yearish)
+        no_auto_renew = Subscription.objects.create(state=State.EXPIRING, end=self.hours_ago)
+        self.assertEqual(Subscription.objects.suspended().count(), 1)
+        self.assertEqual(Subscription.objects.trigger_suspended(), 1)
+        due_fresh = Subscription.objects.get(pk=due.pk)
+        not_due_fresh = Subscription.objects.get(pk=not_due.pk)
+        no_auto_renew_fresh = Subscription.objects.get(pk=no_auto_renew.pk)
+
+        self.assertEqual(due_fresh.state, State.RENEWING)
+        self.assertNotEqual(due.state, due_fresh.state)
+        self.assertEqual(not_due.state, not_due_fresh.state)
+        self.assertEqual(no_auto_renew.state, no_auto_renew_fresh.state)
+
+        mock_signal.assert_called_once_with(due)
+
+    def test_trigger_suspended_timeout(self):
         due = Subscription.objects.create(state=State.SUSPENDED, end=self.days_ago)
         not_due = Subscription.objects.create(state=State.SUSPENDED, end=self.days_ago)
         renewing = Subscription.objects.create(state=State.RENEWING, end=self.days_ago)
@@ -168,7 +186,7 @@ class SubscriptionTestCase(TestCase):
         Subscription.objects.all().update(last_updated=self.days_ago)
         Subscription.objects.filter(pk=not_due.pk).update(last_updated=self.hours_ago)
 
-        self.assertEqual(Subscription.objects.suspended_timeout(timeout_days=3).count(), 1)
+        self.assertEqual(Subscription.objects.suspended_timeout(timeout_hours=72).count(), 1)
         self.assertEqual(Subscription.objects.trigger_suspended_timeout(), 1)
         due_fresh = Subscription.objects.get(pk=due.pk)
         not_due_fresh = Subscription.objects.get(pk=not_due.pk)
