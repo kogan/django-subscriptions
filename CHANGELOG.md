@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.0 (2019-05-07)
+
+- Added a new trigger for renewing subscriptions in SUSPENDED state, which helps for retries
+- Changed `timeout_days` to `timeout_hours` in `suspended_timeout`. `timeout_hours` is still around
+  for backward compatibility
+
+
 ## v0.3.0 (2019-05-01)
 
 - Generated missing migration file

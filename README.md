@@ -109,11 +109,17 @@ Trigger subscriptions that are due to expire:
 Subscription.objects.trigger_expiring() -> int  # number of expirations
 ```
 
-Trigger subscriptions that have been suspended for longer than `timeout_days` to
+Trigger subscriptions that are suspended:
+
+```
+Subscription.objects.trigger_suspended() -> int  # number of renewals
+```
+
+Trigger subscriptions that have been suspended for longer than `timeout_hours` to
 expire:
 
 ```
-Subscription.objects.trigger_suspended_timeout(timeout_days=3) -> int  # number of suspensions
+Subscription.objects.trigger_suspended_timeout(timeout_hours=48) -> int  # number of suspensions
 ```
 
 Trigger subscriptions that have been stuck in renewing state for longer than `timeout_hours`
@@ -131,6 +137,7 @@ The following tasks are defined but are not scheduled:
 ```
 subscriptions.tasks.trigger_renewals
 subscriptions.tasks.trigger_expiring
+subscriptions.tasks.trigger_suspended
 subscriptions.tasks.trigger_suspended_timeout
 subscriptions.tasks.trigger_stuck
 ```
@@ -150,9 +157,13 @@ CELERYBEAT_SCHEDULE = {
         "schedule": crontab(hour=0, minute=15),
     },
     "subscriptions_suspended": {
+        "task": "subscriptions.tasks.trigger_suspended",
+        "schedule": crontab(hour="3,6,9", minute=30),
+    },
+    "subscriptions_suspended_timeout": {
         "task": "subscriptions.tasks.trigger_suspended_timeout",
         "schedule": crontab(hour=0, minute=40),
-        "kwargs": {"days": 3},
+        "kwargs": {"hours": 48},
     },
     "subscriptions_stuck": {
         "task": "subscriptions.tasks.trigger_stuck",

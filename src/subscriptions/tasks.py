@@ -30,8 +30,18 @@ def trigger_expiring():
 
 
 @shared_task(acks_late=True)
-def trigger_suspended_timeout(days=3):
-    count = Subscription.objects.trigger_suspended_timeout(timeout_days=days)
+def trigger_suspended():
+    count = Subscription.objects.trigger_suspended()
+    log.info("Trigger [%s] updated [%d] records", "renewals", count)
+    return count
+
+
+@shared_task(acks_late=True)
+def trigger_suspended_timeout(hours=48, days=None):
+    if days is not None:
+        hours = days * 24
+
+    count = Subscription.objects.trigger_suspended_timeout(timeout_hours=hours)
     log.info("Trigger [%s] updated [%d] records", "suspended", count)
     return count
 
