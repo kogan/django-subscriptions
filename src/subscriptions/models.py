@@ -140,8 +140,8 @@ class Subscription(models.Model):
         permissions = (("can_update_state", "Can update subscription state"),)
 
     def __str__(self):
-        return "({}) {}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
-            self.id or -1, self.get_state_display(), self.start, self.end
+        return "{}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
+            self.get_state_display(), timezone.localdate(self.start), timezone.localdate(self.end)
         )
 
     @transition(field=state, source=State.ACTIVE, target=State.EXPIRING)

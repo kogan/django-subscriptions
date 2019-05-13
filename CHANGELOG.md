@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.0 (unreleased)
+
+- Display start/end dates in the local timezone
+- Changed the display of Subscription.__str__
+
 ## v0.4.0 (2019-05-07)
 
 - Added a new trigger for renewing subscriptions in SUSPENDED state, which helps for retries
