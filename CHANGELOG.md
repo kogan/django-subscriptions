@@ -1,9 +1,10 @@
 # Changelog
 
-## v0.5.0 (unreleased)
+## v0.5.0 (2019-06-04)
 
 - Display start/end dates in the local timezone
 - Changed the display of Subscription.__str__
+- Renewed can now be called from Active state, for an early renewal.
 
 ## v0.4.0 (2019-05-07)
 
