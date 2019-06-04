@@ -105,6 +105,16 @@ class SubscriptionTestCase(TestCase):
         self.assertEqual(sub.end, new_end)
         self.assertEqual(sub.reference, "NEWREF")
 
+    def test_signal_subscription_renewed_from_active(self):
+        with signal_handler(signals.subscription_renewed) as handler:
+            sub = Subscription(state=State.ACTIVE, end=self.yearish)
+            new_end = self.yearish + timedelta(days=365)
+            sub.renewed(new_end, "NEWREF")
+            handler.assert_called_once_with(sender=sub, signal=signals.subscription_renewed)
+        self.assertEqual(sub.state, State.ACTIVE)
+        self.assertEqual(sub.end, new_end)
+        self.assertEqual(sub.reference, "NEWREF")
+
     def test_signal_renewal_failed(self):
         with signal_handler(signals.renewal_failed) as handler:
             sub = Subscription(state=State.RENEWING, end=self.yearish)

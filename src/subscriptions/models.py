@@ -171,7 +171,9 @@ class Subscription(models.Model):
         self.save()
         signals.subscription_due.send_robust(self)
 
-    @transition(field=state, source=[State.RENEWING, State.ERROR], target=State.ACTIVE)
+    @transition(
+        field=state, source=[State.ACTIVE, State.RENEWING, State.ERROR], target=State.ACTIVE
+    )
     def renewed(self, new_end_date, new_reference):
         self.reason = ""
         self.end = new_end_date
