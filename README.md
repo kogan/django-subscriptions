@@ -72,7 +72,7 @@ triggers used to begin the state changes.
 | `cancel_autorenew()`      	| ACTIVE                          	| EXPIRING     	| `autorenew_canceled` 	|
 | `enable_autorenew()`      	| EXPIRING                        	| ACTIVE       	| `autorenew_enabled`  	|
 | `renew()`                 	| ACTIVE,SUSPENDED                	| RENEWING     	| `subscription_due`   	|
-| `renewed()`               	| RENEWING,ERROR                  	| ACTIVE       	| `subscription_renewed`	|
+| `renewed()`               	| ACTIVE,RENEWING,ERROR             | ACTIVE       	| `subscription_renewed`|
 | `renewal_failed(reason="")`	| RENEWING,ERROR                  	| SUSPENDED    	| `renewal_failed`     	|
 | `end_subscription()`      	| ACTIVE,SUSPENDED,EXPIRING,ERROR 	| ENDED        	| `subscription_ended` 	|
 | `state_unknown(reason="")`	| RENEWING                        	| ERROR        	| `subscription_error` 	|
