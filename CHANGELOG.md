@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0 (2019-06-13)
+## v0.5.1 (2019-06-13)
 
 - Only localise datetimes to dates when they are aware
 
