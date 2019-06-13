@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0 (2019-06-13)
+
+- Only localise datetimes to dates when they are aware
+
 ## v0.5.0 (2019-06-04)
 
 - Display start/end dates in the local timezone
