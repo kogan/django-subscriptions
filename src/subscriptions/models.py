@@ -14,7 +14,8 @@ from .fsm_hooks import post_transition
 from .states import SubscriptionState as State
 
 
-def as_date(dt: datetime) -> date:
+def as_date(dt):
+    # type: (datetime) -> date
     if timezone.is_aware(dt):
         return timezone.localdate(dt)
     return dt.date()
