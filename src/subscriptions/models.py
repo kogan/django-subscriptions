@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from datetime import timedelta
+from datetime import date, datetime, timedelta
 
 from django.db import models
 from django.utils import timezone
@@ -12,6 +12,12 @@ from django_fsm_log.decorators import fsm_log_by
 from . import signals
 from .fsm_hooks import post_transition
 from .states import SubscriptionState as State
+
+
+def as_date(dt: datetime) -> date:
+    if timezone.is_aware(dt):
+        return timezone.localdate(dt)
+    return dt.date()
 
 
 class SubscriptionManager(models.Manager):
@@ -141,7 +147,7 @@ class Subscription(models.Model):
 
     def __str__(self):
         return "{}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
-            self.get_state_display(), timezone.localdate(self.start), timezone.localdate(self.end)
+            self.get_state_display(), as_date(self.start), as_date(self.end)
         )
 
     @transition(field=state, source=State.ACTIVE, target=State.EXPIRING)
