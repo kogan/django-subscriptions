@@ -21,10 +21,14 @@ readme = "README.md"
 homepage = "http://github.com/kogan/"
 repository = "http://github.com/kogan/django-subscriptions/"
 documentation = "http://github.com/kogan/django-subscriptions/"
-version = "0.5.1"
+version = "0.6.0"
 description = "A django package for managing subscription states"
 license = "BSD-3-Clause"
-authors = ["Josh Smeaton <josh.smeaton@gmail.com>"]
+authors = [
+    "Josh Smeaton <josh.smeaton@gmail.com>",
+    "Simon Willcock <simon@willcock.com.au>",
+    "Alec McGavin <alec@mcgav.in>",
+]
 packages = [
     { include = "subscriptions", from = "src" },
 ]
