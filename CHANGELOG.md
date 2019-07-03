@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.0 (2019-07-03)
+
+- **Breaking Change** `suspended_timeout` now triggers for subscriptions in SUSPENDED state that are
+  `timeout_hours` past the `subscription.end` time. It used to trigger if `subscription.last_updated`
+  hadn't changed for `timeout_hours`, but if `trigger_suspended` was running daily, the subscription
+  was constantly being updated, and `trigger_suspended_timeout` would never find a record to `end()`.
+
+
 ## v0.5.1 (2019-06-13)
 
 - Only localise datetimes to dates when they are aware

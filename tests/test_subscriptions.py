@@ -189,12 +189,8 @@ class SubscriptionTestCase(TestCase):
 
     def test_trigger_suspended_timeout(self):
         due = Subscription.objects.create(state=State.SUSPENDED, end=self.days_ago)
-        not_due = Subscription.objects.create(state=State.SUSPENDED, end=self.days_ago)
+        not_due = Subscription.objects.create(state=State.SUSPENDED, end=self.hours_ago)
         renewing = Subscription.objects.create(state=State.RENEWING, end=self.days_ago)
-
-        # last_updated rather than end is used for this query
-        Subscription.objects.all().update(last_updated=self.days_ago)
-        Subscription.objects.filter(pk=not_due.pk).update(last_updated=self.hours_ago)
 
         self.assertEqual(Subscription.objects.suspended_timeout(timeout_hours=72).count(), 1)
         self.assertEqual(Subscription.objects.trigger_suspended_timeout(), 1)

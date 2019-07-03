@@ -116,14 +116,14 @@ Subscription.objects.trigger_suspended() -> int  # number of renewals
 ```
 
 Trigger subscriptions that have been suspended for longer than `timeout_hours` to
-expire:
+end (uses `subscription.end` date, not `subscription.last_updated`):
 
 ```
 Subscription.objects.trigger_suspended_timeout(timeout_hours=48) -> int  # number of suspensions
 ```
 
 Trigger subscriptions that have been stuck in renewing state for longer than `timeout_hours`
-to be marked as an error:
+to be marked as an error (uses `subscription.last_updated` to determine the timeout):
 
 ```
 Subscription.objects.trigger_stuck(timeout_hours=2) -> int  # number of error subscriptions
