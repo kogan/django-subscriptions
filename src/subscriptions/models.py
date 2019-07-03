@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 from datetime import date, datetime, timedelta
 
 from django.db import models
+from django.db.models.expressions import ExpressionWrapper as E
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django_fsm import FSMIntegerField, can_proceed, transition
@@ -109,9 +110,12 @@ class SubscriptionQuerySet(models.QuerySet):
         if timeout_days is not None:
             timeout_hours = timeout_days * 24
 
-        return self.filter(
-            state=State.SUSPENDED, end__gte=models.F("end") + timedelta(hours=timeout_hours)
-        )
+        return self.annotate(
+            cutoff=E(
+                models.F("end") + timedelta(hours=timeout_hours),
+                output_field=models.DateTimeField(),
+            )
+        ).filter(state=State.SUSPENDED, cutoff__lte=timezone.now())
 
     def stuck(self, timeout_hours=2):
         return self.filter(
