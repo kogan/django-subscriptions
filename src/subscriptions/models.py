@@ -4,9 +4,10 @@ from __future__ import absolute_import, unicode_literals
 from datetime import date, datetime, timedelta
 
 from django.db import models
+from django.db.models.expressions import ExpressionWrapper as E
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
-from django_fsm import FSMIntegerField, transition
+from django_fsm import FSMIntegerField, can_proceed, transition
 from django_fsm_log.decorators import fsm_log_by
 
 from . import signals
@@ -109,9 +110,12 @@ class SubscriptionQuerySet(models.QuerySet):
         if timeout_days is not None:
             timeout_hours = timeout_days * 24
 
-        return self.filter(
-            state=State.SUSPENDED, last_updated__lte=timezone.now() - timedelta(hours=timeout_hours)
-        )
+        return self.annotate(
+            cutoff=E(
+                models.F("end") + timedelta(hours=timeout_hours),
+                output_field=models.DateTimeField(),
+            )
+        ).filter(state=State.SUSPENDED, cutoff__lte=timezone.now())
 
     def stuck(self, timeout_hours=2):
         return self.filter(
@@ -150,6 +154,9 @@ class Subscription(models.Model):
         return "{}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
             self.get_state_display(), as_date(self.start), as_date(self.end)
         )
+
+    def can_proceed(self, transition_method):
+        return can_proceed(transition_method)
 
     @transition(field=state, source=State.ACTIVE, target=State.EXPIRING)
     def cancel_autorenew(self):
