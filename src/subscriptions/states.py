@@ -14,4 +14,4 @@ class SubscriptionState(IntEnum):
 
     @classmethod
     def choices(cls):
-        return tuple((s.value, "{}".format(SubscriptionState(s.value).name)) for s in cls)
+        return sorted(tuple((s.value, "{}".format(SubscriptionState(s.value).name)) for s in cls))
