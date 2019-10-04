@@ -185,10 +185,11 @@ class Subscription(models.Model):
         self.save()
         signals.subscription_due.send_robust(self)
 
+    @fsm_log_description
     @transition(
         field=state, source=[State.ACTIVE, State.RENEWING, State.ERROR], target=State.ACTIVE
     )
-    def renewed(self, new_end_date, new_reference):
+    def renewed(self, new_end_date, new_reference, description=None):
         self.reason = ""
         self.end = new_end_date
         self.reference = new_reference
