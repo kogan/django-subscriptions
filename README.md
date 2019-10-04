@@ -67,21 +67,23 @@ triggers used to begin the state changes.
 ### State Methods
 
 
-| Method                    	| Source States                   	| Target State 	| Signal Emitted       	|
-|-------------------------- 	|---------------------------------	|--------------	|----------------------	|
-| `cancel_autorenew()`      	| ACTIVE                          	| EXPIRING     	| `autorenew_canceled` 	|
-| `enable_autorenew()`      	| EXPIRING                        	| ACTIVE       	| `autorenew_enabled`  	|
-| `renew()`                 	| ACTIVE,SUSPENDED                	| RENEWING     	| `subscription_due`   	|
-| `renewed()`               	| ACTIVE,RENEWING,ERROR             | ACTIVE       	| `subscription_renewed`|
-| `renewal_failed(reason="")`	| RENEWING,ERROR                  	| SUSPENDED    	| `renewal_failed`     	|
-| `end_subscription()`      	| ACTIVE,SUSPENDED,EXPIRING,ERROR 	| ENDED        	| `subscription_ended` 	|
-| `state_unknown(reason="")`	| RENEWING                        	| ERROR        	| `subscription_error` 	|
+| Method                                         | Source States                   	| Target State 	| Signal Emitted       	|
+|------------------------------------------------|---------------------------------	|--------------	|----------------------	|
+| `cancel_autorenew()`                           | ACTIVE                          	| EXPIRING     	| `autorenew_canceled` 	|
+| `enable_autorenew()`                           | EXPIRING                        	| ACTIVE       	| `autorenew_enabled`  	|
+| `renew()`                                      | ACTIVE,SUSPENDED                	| RENEWING     	| `subscription_due`   	|
+| `renewed(new_end, new_ref, description=None)`  | ACTIVE,RENEWING,ERROR            | ACTIVE       	| `subscription_renewed`|
+| `renewal_failed(description=None)`	         | RENEWING,ERROR                  	| SUSPENDED    	| `renewal_failed`     	|
+| `end_subscription(description=None)`           | ACTIVE,SUSPENDED,EXPIRING,ERROR 	| ENDED        	| `subscription_ended` 	|
+| `state_unknown(description=None)`	             | RENEWING                        	| ERROR        	| `subscription_error` 	|
 
 Example:
 
 `subscription.renew()` may only be called if `subscription.state` is either `ACTIVE` or `SUSPENDED`,
 and will cause `subscription.state` to move into the `RENEWING` state.
 
+The `description` argument is a string that can be used to persist the reason for a state
+change in the `StateLog` table (and admin inlines).
 
 ### Triggers
 
