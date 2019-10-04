@@ -171,6 +171,7 @@ class SubscriptionTestCase(TestCase):
         due = Subscription.objects.create(state=State.EXPIRING, end=self.hours_ago)
         not_due = Subscription.objects.create(state=State.EXPIRING, end=self.yearish)
         ended = Subscription.objects.create(state=State.ENDED, end=self.hours_ago)
+
         self.assertEqual(Subscription.objects.expiring().count(), 1)
         self.assertEqual(Subscription.objects.trigger_expiring(), 1)
         due_fresh = Subscription.objects.get(pk=due.pk)
