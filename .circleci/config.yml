@@ -100,6 +100,8 @@ jobs:
           name: Tests
           command: |
             poetry run python runtests.py
+      - store_test_results:
+          path: test-results
 
   test-py2:
     docker:
@@ -121,6 +123,8 @@ jobs:
           name: Tests
           command: |
             python runtests.py
+      - store_test_results:
+          path: test-results
 
   deploy:
     docker:
