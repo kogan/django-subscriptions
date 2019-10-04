@@ -8,7 +8,7 @@ from django.db.models.expressions import ExpressionWrapper as E
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django_fsm import FSMIntegerField, can_proceed, transition
-from django_fsm_log.decorators import fsm_log_by
+from django_fsm_log.decorators import fsm_log_by, fsm_log_description
 
 from . import signals
 from .fsm_hooks import post_transition
@@ -198,9 +198,13 @@ class Subscription(models.Model):
         self.save()
         signals.subscription_renewed.send_robust(self)
 
+    @fsm_log_description
     @transition(field=state, source=[State.RENEWING, State.ERROR], target=State.SUSPENDED)
-    def renewal_failed(self, reason=""):
-        self.reason = reason
+    def renewal_failed(self, reason="", description=None):
+        if description:
+            self.reason = description
+        else:
+            self.reason = reason
 
     @post_transition(renewal_failed)
     def post_renewal_failed(self):
@@ -208,13 +212,17 @@ class Subscription(models.Model):
         signals.renewal_failed.send_robust(self)
 
     @fsm_log_by
+    @fsm_log_description
     @transition(
         field=state,
         source=[State.ACTIVE, State.SUSPENDED, State.EXPIRING, State.ERROR],
         target=State.ENDED,
     )
-    def end_subscription(self, reason="", by=None):
-        self.reason = reason
+    def end_subscription(self, reason="", by=None, description=None):
+        if description:
+            self.reason = description
+        else:
+            self.reason = reason
         self.end = timezone.now()
 
     @post_transition(end_subscription)
@@ -222,8 +230,9 @@ class Subscription(models.Model):
         self.save()
         signals.subscription_ended.send_robust(self)
 
+    @fsm_log_description
     @transition(field=state, source=State.RENEWING, target=State.ERROR)
-    def state_unknown(self, reason=""):
+    def state_unknown(self, reason="", description=None):
         """
         An error occurred after the payment was signalled, but before the
         subscription could be updated, so the correct state is unknown.
@@ -234,7 +243,10 @@ class Subscription(models.Model):
         If a record remains in RENEWING state for longer than some timeout, the
         record will be moved to this state.
         """
-        self.reason = reason
+        if description:
+            self.reason = description
+        else:
+            self.reason = reason
 
     @post_transition(state_unknown)
     def post_state_unknown(self):

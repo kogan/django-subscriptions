@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0 (2019-10-07)
+
+- Transition methods that received a `reason` argument now accept a `description` argument,
+  which is stored on the state log, so that reasons aren't lost. Reason is still valid,
+  but will not be persisted to the state log. Migrate to using `description`, and it will
+  log in the state log AND the `reason` field.
+  `state_unknown`, `renewal_failed`, `end_subscription` are affected.
+
 ## v1.0.1 (2019-09-13)
 
 - SubscriptionState.choices is now sorted, so that the order is consistent between python versions,
