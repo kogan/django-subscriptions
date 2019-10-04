@@ -7,6 +7,7 @@ from datetime import timedelta
 import mock
 from django.test import TestCase
 from django.utils import timezone
+from django_fsm_log.models import StateLog
 from subscriptions import signals
 from subscriptions.models import Subscription
 from subscriptions.states import SubscriptionState as State
@@ -109,32 +110,44 @@ class SubscriptionTestCase(TestCase):
         with signal_handler(signals.subscription_renewed) as handler:
             sub = Subscription(state=State.ACTIVE, end=self.yearish)
             new_end = self.yearish + timedelta(days=365)
-            sub.renewed(new_end, "NEWREF")
+            sub.renewed(new_end, "NEWREF", description="AUTOSUB")
             handler.assert_called_once_with(sender=sub, signal=signals.subscription_renewed)
         self.assertEqual(sub.state, State.ACTIVE)
         self.assertEqual(sub.end, new_end)
         self.assertEqual(sub.reference, "NEWREF")
+        log = StateLog.objects.for_(sub).get()
+        self.assertEqual(log.description, "AUTOSUB")
+        self.assertEqual(log.transition, "renewed")
 
     def test_signal_renewal_failed(self):
         with signal_handler(signals.renewal_failed) as handler:
             sub = Subscription(state=State.RENEWING, end=self.yearish)
-            sub.renewal_failed()
+            sub.renewal_failed(description="DECLINED")
             handler.assert_called_once_with(sender=sub, signal=signals.renewal_failed)
         self.assertEqual(sub.state, State.SUSPENDED)
+        log = StateLog.objects.for_(sub).get()
+        self.assertEqual(log.description, "DECLINED")
+        self.assertEqual(log.transition, "renewal_failed")
 
     def test_signal_subscription_ended(self):
         with signal_handler(signals.subscription_ended) as handler:
             sub = Subscription(state=State.SUSPENDED, end=self.yearish)
-            sub.end_subscription()
+            sub.end_subscription(description="LetItGo")
             handler.assert_called_once_with(sender=sub, signal=signals.subscription_ended)
         self.assertEqual(sub.state, State.ENDED)
+        log = StateLog.objects.for_(sub).get()
+        self.assertEqual(log.description, "LetItGo")
+        self.assertEqual(log.transition, "end_subscription")
 
     def test_signal_subscription_error(self):
         with signal_handler(signals.subscription_error) as handler:
             sub = Subscription(state=State.RENEWING, end=self.yearish)
-            sub.state_unknown()
+            sub.state_unknown(description="WAT")
             handler.assert_called_once_with(sender=sub, signal=signals.subscription_error)
         self.assertEqual(sub.state, State.ERROR)
+        log = StateLog.objects.for_(sub).get()
+        self.assertEqual(log.description, "WAT")
+        self.assertEqual(log.transition, "state_unknown")
 
     @mock.patch("subscriptions.models.signals.subscription_due.send_robust")
     def test_trigger_renewals(self, mock_signal):
