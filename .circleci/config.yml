@@ -15,10 +15,6 @@ workflows:
           name: "python3.7"
           requires:
             - build
-      - test-py2:
-          name: "python2.7"
-          requires:
-            - build
 
   deployment-workflow:
     jobs:
@@ -100,29 +96,6 @@ jobs:
           name: Tests
           command: |
             poetry run python runtests.py
-      - store_test_results:
-          path: test-results
-
-  test-py2:
-    docker:
-      - image: circleci/python:2.7
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - deps-py27-{{ checksum "tests/requirements.txt" }}
-      - run:
-          name: Install Dependencies
-          command: |
-            pip install --user -r tests/requirements.txt
-      - save_cache:
-          key: deps-py27-{{ checksum "tests/requirements.txt" }}
-          paths:
-            - /home/circleci/.cache/pip/
-      - run:
-          name: Tests
-          command: |
-            python runtests.py
       - store_test_results:
           path: test-results
 

@@ -15,24 +15,28 @@ with whatever timing makes sense for that application.
 log = get_task_logger(__name__)
 
 
+def log_update(trigger: str, count: int):
+    log.info("subscriptions.trigger | trigger=%s | count=%s |", trigger, count)
+
+
 @shared_task(acks_late=True)
 def trigger_renewals():
     count = Subscription.objects.trigger_renewals()
-    log.info("Trigger [%s] updated [%d] records", "renewals", count)
+    log_update("renewals", count)
     return count
 
 
 @shared_task(acks_late=True)
 def trigger_expiring():
     count = Subscription.objects.trigger_expiring()
-    log.info("Trigger [%s] updated [%d] records", "expiring", count)
+    log_update("expiring", count)
     return count
 
 
 @shared_task(acks_late=True)
 def trigger_suspended():
     count = Subscription.objects.trigger_suspended()
-    log.info("Trigger [%s] updated [%d] records", "renewals", count)
+    log_update("suspended", count)
     return count
 
 
@@ -42,12 +46,12 @@ def trigger_suspended_timeout(hours=48, days=None):
         hours = days * 24
 
     count = Subscription.objects.trigger_suspended_timeout(timeout_hours=hours)
-    log.info("Trigger [%s] updated [%d] records", "suspended", count)
+    log_update("timeout", count)
     return count
 
 
 @shared_task(acks_late=True)
 def trigger_stuck(hours=2):
     count = Subscription.objects.trigger_stuck(timeout_hours=hours)
-    log.info("Trigger [%s] updated [%d] records", "stuck", count)
+    log_update("stuck", count)
     return count

@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 from datetime import date, datetime, timedelta
 
 from django.db import models
 from django.db.models.expressions import ExpressionWrapper as E
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django_fsm import FSMIntegerField, can_proceed, transition
 from django_fsm_log.decorators import fsm_log_by, fsm_log_description
 
@@ -123,7 +119,6 @@ class SubscriptionQuerySet(models.QuerySet):
         )
 
 
-@python_2_unicode_compatible
 class Subscription(models.Model):
     state = FSMIntegerField(
         default=State.ACTIVE,
@@ -151,8 +146,8 @@ class Subscription(models.Model):
         permissions = (("can_update_state", "Can update subscription state"),)
 
     def __str__(self):
-        return "{}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
-            self.get_state_display(), as_date(self.start), as_date(self.end)
+        return "[{}] {}: {:%Y-%m-%d} to {:%Y-%m-%d}".format(
+            self.pk, self.get_state_display(), as_date(self.start), as_date(self.end)
         )
 
     def can_proceed(self, transition_method):
