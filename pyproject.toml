@@ -21,7 +21,7 @@ readme = "README.md"
 homepage = "http://github.com/kogan/"
 repository = "http://github.com/kogan/django-subscriptions/"
 documentation = "http://github.com/kogan/django-subscriptions/"
-version = "1.1.0"
+version = "2.0.0"
 description = "A django package for managing subscription states"
 license = "BSD-3-Clause"
 authors = [
@@ -38,39 +38,34 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Framework :: Django",
-    "Framework :: Django :: 1.11",
-    "Framework :: Django :: 2.0",
-    "Framework :: Django :: 2.1",
     "Framework :: Django :: 2.2",
 ]
 
 
 [tool.poetry.dependencies]
-python = "~2.7 || >=3.6"
-django-fsm = "^2.6"
-django-fsm-log = "^1.6"
-enum34 = {version = "~1.1", python = "~2.7"}
+python = ">=3.6"
+django-fsm = ">=2.6"
+django-fsm-log = ">=1.6"
 
 [tool.poetry.dev-dependencies]
-django = "~1.11 || >=2.2"
-flake8 = "^3.7"
-flake8-isort = "^2.7"
-flake8-builtins = "^1.4"
-flake8-comprehensions = "~1.4"
-flake8-pep3101 = "^1.2"
-isort = "^4.3"
-black = {version = "^18.3-alpha.0",allows-prereleases = true, python = ">=3.6"}
-ipdb = "^0.12.0"
-pre-commit = "*"
-celery = "^4.3"
-mock = "^2.0"
+django = ">=2.2"
+flake8 = ">=3.7"
+flake8-isort = ">=2.7"
+flake8-builtins = ">=1.4"
+flake8-comprehensions = ">=1.4"
+flake8-pep3101 = ">=1.2"
+isort = ">=4.3"
+black = {version = ">=19.10b0", allow-prereleases = true}
+ipdb = ">=0.12.0"
+pre-commit = ">=2.1"
+celery = ">=4.3"
 unittest-xml-reporting = "^2.5"
+mypy = ">=0.770"
 
 [build-system]
 requires = ["poetry>=0.12"]

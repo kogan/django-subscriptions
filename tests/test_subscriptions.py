@@ -3,8 +3,8 @@ from __future__ import absolute_import, unicode_literals
 
 from contextlib import contextmanager
 from datetime import timedelta
+from unittest import mock
 
-import mock
 from django.test import TestCase
 from django.utils import timezone
 from django_fsm_log.models import StateLog

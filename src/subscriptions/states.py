@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 from enum import IntEnum
 
 
@@ -14,4 +11,4 @@ class SubscriptionState(IntEnum):
 
     @classmethod
     def choices(cls):
-        return sorted(tuple((s.value, "{}".format(SubscriptionState(s.value).name)) for s in cls))
+        return sorted((s.value, "{}".format(SubscriptionState(s.value).name)) for s in cls)
