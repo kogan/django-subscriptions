@@ -12,7 +12,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_filter = ("state", "start", "end", "last_updated")
     list_per_page = 50
     ordering = ("-last_updated",)
-    search_fields = ("^reference",)
+    search_fields = ("reference__startswith",)
     formfield_overrides = {TextField: {"widget": Textarea(attrs={"cols": "100", "rows": 1})}}
     readonly_fields = ("state", "start", "end", "reference", "last_updated", "reason")
     fields = ("state", "start", "end", "reference", "last_updated", "reason")
