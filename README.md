@@ -9,8 +9,8 @@ A django package for managing the status and terms of a subscription.
 
 ## Compatibility
 
-- Django: 1.11 and 2.2 (LTS versions only)
-- Python: 2.7 and 3.6+
+- Django: 2.2 (LTS versions only)
+- Python: 3.6+
 
 Other Django or Python versions **may** work, but that is totally cooincidental
 and no effort is made to maintain compatibility with versions other than those
