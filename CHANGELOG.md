@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.1.0 (2020-06-01)
+
+- Introduced a boolean setting `SUBSCRIPTIONS_STUCK_RETRY`, defaulting to `False`, that will
+  cause stuck subscriptions to be marked as `renewal_failed` rather than `state_unknown`.
+
 ## v2.0.0 (2020-04-19)
 
 - Dropped support for Django < 2.2

@@ -131,6 +131,11 @@ to be marked as an error (uses `subscription.last_updated` to determine the time
 Subscription.objects.trigger_stuck(timeout_hours=2) -> int  # number of error subscriptions
 ```
 
+If `settings.SUBSCRIPTIONS_STUCK_RETRY` is `True`, then subscriptions are moved back into
+the `SUSPENDED` state, ready to be retried. This can be useful when you have an offline
+process that can resolve stuck subscription issues, and there is no issue retrying the
+subscription.
+
 
 ### Tasks
 
