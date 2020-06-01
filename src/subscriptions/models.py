@@ -1,5 +1,7 @@
+import typing as t
 from datetime import date, datetime, timedelta
 
+from django.conf import settings
 from django.db import models
 from django.db.models.expressions import ExpressionWrapper as E
 from django.utils import timezone
@@ -84,10 +86,16 @@ class SubscriptionManager(models.Manager):
         Subscriptions in this state usually crashed during the renewal process, so we don't know if
         the renewal succeeded or failed.
         """
+        retry_stuck = getattr(settings, "SUBSCRIPTIONS_STUCK_RETRY", False)
         count = 0
-        old_renewing = self.get_queryset().stuck(timeout_hours).order_by("last_updated").iterator()
+        old_renewing: t.Iterable[Subscription] = self.get_queryset().stuck(timeout_hours).order_by(
+            "last_updated"
+        ).iterator()
         for subscription in old_renewing:
-            subscription.state_unknown()
+            if retry_stuck:
+                subscription.renewal_failed(description="stuck subscription")
+            else:
+                subscription.state_unknown(description="stuck subscription")
             count += 1
         return count
 

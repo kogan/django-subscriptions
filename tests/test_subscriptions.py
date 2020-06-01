@@ -236,3 +236,25 @@ class SubscriptionTestCase(TestCase):
         self.assertNotEqual(due.state, due_fresh.state)
         self.assertEqual(not_due.state, not_due_fresh.state)
         self.assertEqual(ended.state, ended_fresh.state)
+
+    def test_trigger_stuck_retry(self):
+        due = Subscription.objects.create(state=State.RENEWING, end=self.days_ago)
+        not_due = Subscription.objects.create(state=State.RENEWING, end=self.days_ago)
+        ended = Subscription.objects.create(state=State.ENDED, end=self.days_ago)
+
+        # last_updated rather than end is used for this query
+        Subscription.objects.all().update(last_updated=self.hours_ago)
+        Subscription.objects.filter(pk=not_due.pk).update(last_updated=timezone.now())
+
+        with self.settings(SUBSCRIPTIONS_STUCK_RETRY=True):
+            self.assertEqual(Subscription.objects.stuck(timeout_hours=2).count(), 1)
+            self.assertEqual(Subscription.objects.trigger_stuck(), 1)
+
+        due_fresh = Subscription.objects.get(pk=due.pk)
+        not_due_fresh = Subscription.objects.get(pk=not_due.pk)
+        ended_fresh = Subscription.objects.get(pk=ended.pk)
+
+        self.assertEqual(due_fresh.state, State.SUSPENDED)
+        self.assertNotEqual(due.state, due_fresh.state)
+        self.assertEqual(not_due.state, not_due_fresh.state)
+        self.assertEqual(ended.state, ended_fresh.state)
