@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.1.1 (2020-12-29)
+
+- Subscriptions in `SUSPENDED` state can now be `renewed()` which solves an issue
+  with payment callbacks correctly identifying a payment success.
+
 ## v2.1.0 (2020-06-01)
 
 - Introduced a boolean setting `SUBSCRIPTIONS_STUCK_RETRY`, defaulting to `False`, that will

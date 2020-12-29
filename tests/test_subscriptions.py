@@ -258,3 +258,12 @@ class SubscriptionTestCase(TestCase):
         self.assertNotEqual(due.state, due_fresh.state)
         self.assertEqual(not_due.state, not_due_fresh.state)
         self.assertEqual(ended.state, ended_fresh.state)
+
+    def test_renewed_from_suspended(self):
+        """
+        A subscription in SUSPENDED can be RENEWED if new information arrives after
+        the fact.
+        """
+        sub = Subscription.objects.create(state=State.SUSPENDED, end=self.days_ago)
+        sub.renewed(timezone.now() + timedelta(days=7), "MYREF", "Renewed from SUSPENDED")
+        self.assertEqual(sub.state, State.ACTIVE)
