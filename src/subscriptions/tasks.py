@@ -20,8 +20,8 @@ def log_update(trigger: str, count: int):
 
 
 @shared_task(acks_late=True)
-def trigger_renewals():
-    count = Subscription.objects.trigger_renewals()
+def trigger_renewals(limit=None):
+    count = Subscription.objects.trigger_renewals(limit)
     log_update("renewals", count)
     return count
 
