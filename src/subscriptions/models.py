@@ -24,13 +24,16 @@ class SubscriptionManager(models.Manager):
     def add_subscription(self, start, end, reference):
         return self.create(state=State.ACTIVE, start=start, end=end, reference=reference)
 
-    def trigger_renewals(self):
+    def trigger_renewals(self, limit=None):
         """
         Finds all subscriptions that are due to be renewed, and begins the renewal process.
+        Can set limit to set the number of renewals to be triggered at a time
         """
         count = 0
         renewals = self.get_queryset().renewals_due().order_by("last_updated").iterator()
-        for subscription in renewals:
+        if limit is not None and isinstance(limit, int) and limit > 0:
+            renewals = renewals[:limit]
+        for subscription in renewals.iterator():
             subscription.renew()
             count += 1
         return count
